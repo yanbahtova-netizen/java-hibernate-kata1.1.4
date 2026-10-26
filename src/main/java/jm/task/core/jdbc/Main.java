@@ -14,13 +14,9 @@ public class Main {
         System.out.println("done епта");
 
         userService.saveUser("Марина", "Андреева", (byte) 34);
-        System.out.println("Пользователь добавлен");
         userService.saveUser("Иван", "Иванов", (byte) 44);
-        System.out.println("Пользователь добавлен");
         userService.saveUser("Петр", "Петров", (byte) 54);
-        System.out.println("Пользователь добавлен");
         userService.saveUser("Залупа", "Блядская", (byte) 64);
-        System.out.println("Пользователь добавлен");
 
         List<User> users = userService.getAllUsers();
         System.out.println(users);
