@@ -12,19 +12,19 @@ public class UserDaoHibernateImpl implements UserDao {
     }
     @Override
     public void createUsersTable() {
-        Transaction zalupa = null;
+        Transaction transaction = null;
         String sql = "CREATE TABLE IF NOT EXISTS users (" +
                 "id BIGINT PRIMARY KEY AUTO_INCREMENT, " +
                 "name VARCHAR (50), " +
                 "lastName VARCHAR (50), " +
                 "age INT)";
         try (Session session = Util.getSession()) {
-            zalupa = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.createNativeQuery(sql).executeUpdate();
-            zalupa.commit();
+            transaction.commit();
         } catch (Exception e) {
-            if(zalupa != null && zalupa.isActive()) {
-                zalupa.rollback();
+            if(transaction != null && transaction.isActive()) {
+                transaction.rollback();
             }
             throw new RuntimeException(e);
         }
@@ -32,15 +32,15 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void dropUsersTable() {
-        Transaction zalupa = null;
+        Transaction transaction = null;
         String sql = "DROP TABLE IF EXISTS users";
         try(Session session = Util.getSession()) {
-            zalupa = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.createNativeQuery(sql).executeUpdate();
-            zalupa.commit();
+            transaction.commit();
         } catch (Exception e) {
-            if(zalupa != null && zalupa.isActive()) {
-                zalupa.rollback();
+            if(transaction != null && transaction.isActive()) {
+                transaction.rollback();
             }
             throw new RuntimeException(e);
         }
@@ -48,15 +48,15 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        Transaction zalupa = null;
+        Transaction transaction = null;
         try(Session session = Util.getSession()) {
-            zalupa = session.beginTransaction();
+            transaction = session.beginTransaction();
             User user = new User(name, lastName, age);
             session.persist(user);
-            zalupa.commit();
+            transaction.commit();
         } catch (Exception e) {
-            if(zalupa != null && zalupa.isActive()) {
-                zalupa.rollback();
+            if(transaction != null && transaction.isActive()) {
+                transaction.rollback();
             }
             throw new RuntimeException(e);
         }
@@ -64,14 +64,14 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void removeUserById(long id) {
-        Transaction zalupa = null;
+        Transaction transaction = null;
         try(Session session = Util.getSession()) {
-            zalupa = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.createQuery("DELETE FROM User WHERE id = :id").setParameter("id", id).executeUpdate();
-            zalupa.commit();
+            transaction.commit();
         } catch (Exception e) {
-            if(zalupa != null && zalupa.isActive()) {
-                zalupa.rollback();
+            if(transaction != null && transaction.isActive()) {
+                transaction.rollback();
             }
             throw new RuntimeException(e);
         }
@@ -80,22 +80,21 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
         try(Session session = Util.getSession()) {
-            List<User> users = session.createQuery("FROM User", User.class).list();
-            return users;
+            return session.createQuery("FROM User", User.class).list();
         }
     }
 
     @Override
     public void cleanUsersTable() {
-        Transaction zalupa = null;
+        Transaction transaction = null;
         String sql = "DELETE FROM users";
         try(Session session = Util.getSession()) {
-            zalupa = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.createNativeQuery(sql).executeUpdate();
-            zalupa.commit();
+            transaction.commit();
         } catch (Exception e) {
-            if(zalupa != null && zalupa.isActive()) {
-                zalupa.rollback();
+            if(transaction != null && transaction.isActive()) {
+                transaction.rollback();
             }
             throw new RuntimeException(e);
         }
